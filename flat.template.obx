@@ -1,7 +1,6 @@
 IMPEX.VERSION "2.0"
 name                             "{ob_name}"
 userComments                     "{user_comments}"
-InstrumentComments               ""
 userPriority                     "1"
 type                             "O"
 
@@ -23,7 +22,7 @@ equinox                          "{target_equinox}"
 epoch                            "{target_epoch:.1f}"
 ra                               "{target_ra}"
 dec                              "{target_dec}"
-objectClass                      ""
+objectClass                      "Star"
 
 
 CONSTRAINT.SET.NAME              "{constraint_name}"

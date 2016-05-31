@@ -20,6 +20,8 @@ import logging
 import os
 import yaml
 
+repr_sexagesimal = lambda c: "{0}{1:02.0f}:{2:02.0f}:{3:.5f}".format(
+    "+" if c.degree > 0 else "-", abs(c.hms.h), abs(c.hms.m), abs(c.hms.s))
 
 class ObservationBlock(object):
 
@@ -53,6 +55,19 @@ class ObservationBlock(object):
         })
 
         return None
+
+
+    def update(self, **kwargs):
+        """
+        Update the parameters of the observing block.
+
+        :param kwargs:
+            A dictionary containing key/value pairs of entries to update to the
+            observing block.
+        """
+
+        self.__dict__.update(kwargs)
+        return True
 
 
     def write(self, filename, clobber=False):
@@ -138,6 +153,7 @@ class SkyFlatObservationBlock(FlatObservationBlock):
         return None
 
 
+
 class DomeFlatObservationBlock(FlatObservationBlock):
 
     def __init__(self, ob_name, ins_filter_name, user_comments=None, **kwargs):
@@ -168,7 +184,8 @@ class FocusSequenceObservationBlock(ObservationBlock):
     _template_path = \
         os.path.join(os.path.dirname(__file__), "focus.template.obx")
 
-    def __init__(self, ob_name, ins_filter_name, user_comments=None, **kwargs):
+    def __init__(self, ob_name, ins_filter_name, user_comments=None, 
+        target_ra=0, target_dec=0, **kwargs):
         """
         A focus sequence observation block.
 
@@ -180,6 +197,12 @@ class FocusSequenceObservationBlock(ObservationBlock):
 
         :param user_comments: [optional]
             Any user comments to specify for the Observation Block.
+
+        :param target_ra: [optional]
+            The right ascension of the field center (degrees).
+
+        :param target_dec: [optional]
+            The declination of the field center (degrees).
         """
 
         super(FocusSequenceObservationBlock, self).__init__(
@@ -190,8 +213,10 @@ class FocusSequenceObservationBlock(ObservationBlock):
             "det_win1_uit1": 15,
             "det_win1_offset": 50,
             "seq_nexpo": 9,
+            "target_ra": repr_sexagesimal(target_ra)[1:],
+            "target_dec": repr_sexagesimal(target_dec)
         })
-        return True
+        return None
 
 
 class ScienceObservationBlock(ObservationBlock):
@@ -200,7 +225,7 @@ class ScienceObservationBlock(ObservationBlock):
         os.path.join(os.path.dirname(__file__), "science.template.obx")
 
     def __init__(self, ob_name, ins_filter_name, target_ra, target_dec, 
-        exposure_time, user_comments=None, **kwargs):
+        exposure_time, num_exposures, user_comments=None, **kwargs):
         """
         A science object observation block.
 
@@ -219,6 +244,9 @@ class ScienceObservationBlock(ObservationBlock):
         :param exposure_time:
             The number of seconds to integrate for each exposure.
 
+        :param num_exposures:
+            The number of exposures in this OB.
+
         :param user_comments: [optional]
             Any user comments to specify for the Observation Block.
         """
@@ -226,13 +254,10 @@ class ScienceObservationBlock(ObservationBlock):
         super(ScienceObservationBlock, self).__init__(
             ob_name, ins_filter_name, user_comments, **kwargs)
 
-        repr_sexagesimal = lambda c: "{0:2.0f}:{1:2.0f}:{2:.5f}".format(
-            c.hms.h, c.hms.m, c.hms.s)
-
         self.__dict__.update({
             "det_win1_uit1": exposure_time,
-            "seq_nexpo": 1,
-            "target_ra": repr_sexagesimal(target_ra),
+            "seq_nexpo": num_exposures,
+            "target_ra": repr_sexagesimal(target_ra)[1:],
             "target_dec": repr_sexagesimal(target_dec)
         })
 

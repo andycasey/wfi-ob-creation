@@ -9,9 +9,9 @@ target_equinox: J2000
 target_epoch: 2000
 
 constraint_name: No name
-constraint_seeing: 0
-constraint_air_mass: 0
-constraint_sky_transparency: Photometric
+constraint_seeing: 1.5
+constraint_air_mass: 1.5
+constraint_sky_transparency: Clear
 constraint_fractional_lunar_illumination: 1.0
 constraint_moon_angular_distance: 30
 
