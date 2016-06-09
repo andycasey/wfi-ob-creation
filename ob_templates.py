@@ -20,7 +20,7 @@ import logging
 import os
 import yaml
 
-repr_sexagesimal = lambda c: "{0}{1:02.0f}:{2:02.0f}:{3:.5f}".format(
+repr_sexagesimal = lambda c: "{0}{1:0>02.0f}:{2:0>02.0f}:{3:0>8.5f}".format(
     "+" if c.degree > 0 else "-", abs(c.hms.h), abs(c.hms.m), abs(c.hms.s))
 
 class ObservationBlock(object):

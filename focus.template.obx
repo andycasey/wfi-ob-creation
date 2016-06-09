@@ -39,6 +39,12 @@ instrument "WFI"
 
 
 
+ACQUISITION.TEMPLATE.NAME "WFI_img_acq_Preset"
+TEL.AG.START        "T"
+TEL.PRESET.NEW      "T"
+INS.FILT1.NAME      "{ins_filter_name}"
+
+
 TEMPLATE.NAME "{template_name}"
 DET.WIN1.UIT1      "{det_win1_uit1}"
 DET.WIN1.OFFSET    "{det_win1_offset}"
